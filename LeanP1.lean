@@ -1,1 +1,11 @@
 import LeanP1.Basic
+import LeanP1.InfoTheory.Dist
+import LeanP1.InfoTheory.Entropy
+import LeanP1.InfoTheory.Channel
+import LeanP1.InfoTheory.MutualInfo
+import LeanP1.InfoTheory.Capacity
+import LeanP1.InfoTheory.CodingTheorem
+import LeanP1.InfoTheory.Examples.BSC
+import LeanP1.InfoTheory.Fano
+import LeanP1.InfoTheory.ProductChannel
+import LeanP1.InfoTheory.Converse

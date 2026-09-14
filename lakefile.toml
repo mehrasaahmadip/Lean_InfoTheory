@@ -7,6 +7,7 @@ defaultTargets = ["LeanP1"]
 pp.unicode.fun = true # pretty-prints `fun a ↦ b`
 relaxedAutoImplicit = false
 weak.linter.mathlibStandardSet = true
+weak.linter.style.header = false # header linter is for Mathlib contributions, not user projects
 maxSynthPendingDepth = 3
 
 [[require]]
