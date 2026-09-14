@@ -42,9 +42,16 @@ lake build
 To check a theorem's axioms, add for example `#print axioms LeanP1.Channel.capacity_bsc` to a
 file and read the Infoview in VS Code.
 
-## GitHub configuration
+## Website
 
-The workflows in `.github/workflows` build the project on every push and publish documentation
-to GitHub Pages. To enable the documentation site: under **Settings → Actions → General**,
-allow GitHub Actions to create and approve pull requests; under **Settings → Pages**, select
-"GitHub Actions" as the source.
+Every push to `main` builds the library and renders it with
+[Referee](https://github.com/LeanMachineLearning/exposition) into a site with one page per
+declaration (statement, proof, dependency graph) and overview pages for theorems, claims,
+sorries and upstream trust:
+
+<https://mehrasaahmadip.github.io/Lean_InfoTheory>
+
+The list of headline results shown on the site's Claims page is `formalization.yaml`.
+
+Publishing needs GitHub Pages enabled with "GitHub Actions" as the source, under
+**Settings → Pages**. GitHub Pages is only available for public repositories on the free plan.

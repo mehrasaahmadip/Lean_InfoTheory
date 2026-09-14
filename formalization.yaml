@@ -1,0 +1,39 @@
+# Project metadata in the formalization.yaml v0.4 layout of the Palomar registry.
+# Referee (https://github.com/LeanMachineLearning/exposition) reads `status.main_results` from it
+# to build the Claims page of the site; only the fields that matter for that are filled in.
+version: "v0.4"
+
+project:
+  name: "Lean_InfoTheory"
+  description: "Shannon channel capacity for discrete memoryless channels over finite alphabets: entropy, mutual information, capacity, Fano's inequality and the converse of the channel coding theorem."
+  authors:
+    - "Mehrasa Ahmadipour"
+  responsible_maintainers:
+    - "Mehrasa Ahmadipour"
+
+status:
+  scope: "Finite alphabets only. Capacity is the supremum of the mutual information over input laws, in nats. The converse of the coding theorem is proved in full; the achievability half is stated but left as sorry."
+  sorry_count: 1
+  sorry_in_definitions: 0
+  axioms: []
+  main_results:
+    - declaration: "LeanP1.Channel.IsAchievable.le_capacity"
+      file: "LeanP1/InfoTheory/Converse.lean"
+      sorry_count: 0
+      axioms: []
+    - declaration: "LeanP1.Channel.Code.fano"
+      file: "LeanP1/InfoTheory/Fano.lean"
+      sorry_count: 0
+      axioms: []
+    - declaration: "LeanP1.Channel.capacity_pow_le"
+      file: "LeanP1/InfoTheory/ProductChannel.lean"
+      sorry_count: 0
+      axioms: []
+    - declaration: "LeanP1.Channel.capacity_bsc"
+      file: "LeanP1/InfoTheory/Examples/BSC.lean"
+      sorry_count: 0
+      axioms: []
+    - declaration: "LeanP1.Channel.operationalCapacity_eq_capacity"
+      file: "LeanP1/InfoTheory/Converse.lean"
+      sorry_count: 1
+      axioms: []
