@@ -59,7 +59,7 @@ jobs:
       # home_page/ (as blueprint/, blueprint.pdf and docs/); deployment is done below so that the
       # Referee site can be added to the same tree.
       - name: Build the blueprint and the API documentation
-        uses: leanprover-community/docgen-action@v1
+        uses: leanprover-community/docgen-action@56023ee2a4b3630c1071825be5bafdb43f540bbd # 2026-08-21; the v1 tag is older and lacks the deploy/build-page inputs
         with:
           blueprint: true
           api-docs: true
