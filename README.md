@@ -49,7 +49,7 @@ Every push to `main` builds the library and renders it with
 declaration (statement, proof, dependency graph) and overview pages for theorems, claims,
 sorries and upstream trust:
 
-<https://mehrasaahmadip.github.io/Lean_InfoTheory>
+[mehrasaahmadip.github.io/Lean_InfoTheory](https://mehrasaahmadip.github.io/Lean_InfoTheory/)
 
 The list of headline results shown on the site's Claims page is `formalization.yaml`.
 
