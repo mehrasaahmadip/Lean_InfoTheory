@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lean_InfoTheory</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      max-width: 42rem; margin: 3rem auto; padding: 0 1.25rem; line-height: 1.55;
+    }
+    h1 { margin-bottom: 0.25rem; }
+    p.sub { margin-top: 0; opacity: 0.75; }
+    ul.links { list-style: none; padding: 0; }
+    ul.links li { margin: 0.9rem 0; }
+    ul.links a { font-weight: 600; }
+    ul.links span { display: block; opacity: 0.8; }
+    footer { margin-top: 3rem; font-size: 0.9rem; opacity: 0.7; }
+  </style>
+</head>
+<body>
+  <h1>Lean_InfoTheory</h1>
+  <p class="sub">Shannon's channel capacity for discrete memoryless channels over finite alphabets,
+    formalized in Lean 4 with Mathlib.</p>
+
+  <ul class="links">
+    <li><a href="blueprint/">Blueprint</a>
+      <span>The mathematics, chapter by chapter, with every statement linked to its Lean
+        declaration. Also as a <a href="blueprint.pdf">PDF</a>.</span></li>
+    <li><a href="blueprint/dep_graph_document.html">Dependency graph</a>
+      <span>Every definition and theorem as a node, colored by formalization status, with the
+        edges recording what each result rests on.</span></li>
+    <li><a href="referee/">Referee site</a>
+      <span>One page per Lean declaration: statement, proof, and dependency graph, plus the
+        Theorems, Claims, Sorries and Trust overviews.</span></li>
+    <li><a href="docs/">API documentation</a>
+      <span>Generated Lean documentation of the library and everything it imports.</span></li>
+    <li><a href="https://github.com/mehrasaahmadip/Lean_InfoTheory">Source on GitHub</a>
+      <span>The Lean code, the blueprint sources, and the build configuration.</span></li>
+  </ul>
+
+  <footer>Main results: the capacity of the binary symmetric channel, Fano's inequality, and the
+    converse of the channel coding theorem. The achievability half is stated but not yet proved.</footer>
+</body>
+</html>

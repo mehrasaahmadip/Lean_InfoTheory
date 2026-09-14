@@ -1,0 +1,62 @@
+\chapter{The binary symmetric channel}
+\label{chap:bsc}
+
+\begin{definition}[Bernoulli laws]
+  \label{def:bernoulli}
+  \lean{LeanP1.Dist.bernoulli, LeanP1.Dist.entropy_bernoulli, Real.binEntropy}
+  \leanok
+  \uses{def:dist, def:entropy}
+  For $q \in [0, 1]$ the Bernoulli law on $\{\mathrm{false}, \mathrm{true}\}$ puts mass $q$ on
+  $\mathrm{true}$.  Its entropy is the binary entropy
+  $\binEntropy(q) = \negMulLog(q) + \negMulLog(1 - q)$.
+\end{definition}
+
+\begin{definition}[Binary symmetric channel]
+  \label{def:bsc}
+  \lean{LeanP1.Channel.bsc, LeanP1.Channel.bsc_entropy}
+  \leanok
+  \uses{def:channel, def:bernoulli}
+  For $\varepsilon \in [0, 1]$ the binary symmetric channel $\mathrm{BSC}_\varepsilon$ flips its input
+  bit with probability $\varepsilon$.  Every row of it has entropy $\binEntropy(\varepsilon)$.
+\end{definition}
+
+\begin{lemma}
+  \label{lem:bsc_condEntropy}
+  \lean{LeanP1.Channel.bsc_condEntropy, LeanP1.Channel.bsc_output_uniform}
+  \leanok
+  \uses{def:bsc, def:mutualInfo, def:pure_uniform}
+  For every input law $p$, $\Ent(Y \mid X) = \binEntropy(\varepsilon)$; the uniform input produces the
+  uniform output.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Direct computation.
+\end{proof}
+
+\begin{lemma}
+  \label{lem:bsc_mutualInfo}
+  \lean{LeanP1.Channel.bsc_mutualInfo_le, LeanP1.Channel.bsc_mutualInfo_uniform}
+  \leanok
+  \uses{def:bsc, def:mutualInfo}
+  $\MI(p, \mathrm{BSC}_\varepsilon) \le \log 2 - \binEntropy(\varepsilon)$ for every $p$, with equality for the
+  uniform input.
+\end{lemma}
+\begin{proof}
+  \leanok
+  \uses{lem:bsc_condEntropy, thm:entropy_le_log_card, lem:entropy_pure_uniform}
+  The output lives on a two-element set, so its entropy is at most $\log 2$, with equality when it
+  is uniform.
+\end{proof}
+
+\begin{theorem}[Capacity of the binary symmetric channel]
+  \label{thm:capacity_bsc}
+  \lean{LeanP1.Channel.capacity_bsc}
+  \leanok
+  \uses{def:capacity, def:bsc}
+  $\Capac(\mathrm{BSC}_\varepsilon) = \log 2 - \binEntropy(\varepsilon)$.
+\end{theorem}
+\begin{proof}
+  \leanok
+  \uses{lem:bsc_mutualInfo, lem:capacity_two_halves}
+  Both halves of Lemma~\ref{lem:capacity_two_halves} are supplied by Lemma~\ref{lem:bsc_mutualInfo}.
+\end{proof}

@@ -1,0 +1,22 @@
+\chapter{Introduction}
+
+This blueprint describes a formalization, in Lean~4 with Mathlib, of Shannon's channel capacity
+for discrete memoryless channels over finite alphabets.  It follows the structure of the Lean
+files: every definition and statement below names the Lean declaration that implements it, and
+the dependency graph records what each result rests on.
+
+\paragraph{Setting.}
+All alphabets are finite sets.  A distribution on a finite set $\calX$ is a function
+$p \colon \calX \to \mathbb R$ with $p(x) \ge 0$ and $\sum_x p(x) = 1$.  Entropy is measured in
+nats, using the natural logarithm, so that Mathlib's function $\negMulLog(x) = -x \log x$ can be
+used directly.  Conditional distributions are never formed: every inequality that classically
+goes through a conditional law is instead obtained by summing a pointwise inequality for
+$\negMulLog$, so that no division by a probability ever appears.
+
+\paragraph{Main results.}
+The capacity $\Capac(W) = \sup_p \MI(p, W)$ of a channel satisfies $0 \le \Capac(W) \le \log|\calX|$
+and $\Capac(W) \le \log|\calY|$ (Chapter~\ref{chap:capacity}); the capacity of the binary
+symmetric channel is $\log 2 - \binEntropy(\varepsilon)$ (Chapter~\ref{chap:bsc}); Fano's
+inequality holds for block codes and gives the converse of the channel coding theorem: every
+achievable rate is at most $\Capac(W)$ (Chapter~\ref{chap:converse}).  The achievability half of the
+coding theorem is stated but not yet proved.

@@ -1,0 +1,94 @@
+\chapter{Channels}
+\label{chap:channels}
+
+\begin{definition}[Discrete memoryless channel]
+  \label{def:channel}
+  \lean{LeanP1.Channel}
+  \leanok
+  \uses{def:dist}
+  A \emph{channel} from $\calX$ to $\calY$ is a function $W \colon \calX \to \dist{\calY}$.  We write
+  $W(y \mid x)$ for the probability of receiving $y$ when $x$ is sent.
+\end{definition}
+
+\begin{definition}[Output and joint laws]
+  \label{def:output_joint}
+  \lean{LeanP1.Channel.output, LeanP1.Channel.joint}
+  \leanok
+  \uses{def:channel}
+  For an input law $p \in \dist{\calX}$, the \emph{output law} $pW \in \dist{\calY}$ is
+  $(pW)(y) = \sum_x p(x) W(y \mid x)$, and the \emph{joint law} of input and output is
+  $(p \ltimes W)(x, y) = p(x) W(y \mid x)$.
+\end{definition}
+
+\begin{definition}[Memoryless extension]
+  \label{def:pow}
+  \lean{LeanP1.Channel.pow}
+  \leanok
+  \uses{def:channel, def:prod}
+  The $n$-fold extension $W^n$ is the channel from $\calX^n$ to $\calY^n$ with
+  $W^n(y \mid x) = \prod_{i=1}^n W(y_i \mid x_i)$.
+\end{definition}
+
+\begin{definition}[Product channel]
+  \label{def:channel_prod}
+  \lean{LeanP1.Channel.prod}
+  \leanok
+  \uses{def:channel, def:prod}
+  For channels $W_1 \colon \calX_1 \to \dist{\calY_1}$ and $W_2 \colon \calX_2 \to \dist{\calY_2}$, the
+  \emph{product channel} $W_1 \times W_2$ sends $(x_1, x_2)$ to $W_1(x_1) \otimes W_2(x_2)$.
+\end{definition}
+
+\begin{definition}[Relabeling the outputs]
+  \label{def:mapOutput}
+  \lean{LeanP1.Channel.mapOutput}
+  \leanok
+  \uses{def:channel, def:map}
+  For a bijection $\sigma \colon \calY \to \calY'$, the channel $\sigma W$ sends $x$ to $\sigma_* W(x)$.
+\end{definition}
+
+\begin{lemma}[Output laws under relabeling]
+  \label{lem:output_relabel}
+  \lean{LeanP1.Channel.output_comp, LeanP1.Channel.output_mapOutput}
+  \leanok
+  \uses{def:output_joint, def:map, def:mapOutput}
+  For $f \colon \calZ \to \calX$, the channel $W \circ f$ has output law $(f_* p) W$ under the input law $p$.
+  For a bijection $\sigma$ of the outputs, $p(\sigma W) = \sigma_*(pW)$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Regroup the sum defining the output law.
+\end{proof}
+
+\begin{lemma}[Marginals of a product channel's output]
+  \label{lem:output_prod_marginals}
+  \lean{LeanP1.Channel.map_fst_output_prod, LeanP1.Channel.map_snd_output_prod}
+  \leanok
+  \uses{def:output_joint, def:channel_prod, def:map}
+  For a joint input law $p$ on $\calX_1 \times \calX_2$, the marginals of $p(W_1 \times W_2)$ are
+  $(\pi_{1*} p) W_1$ and $(\pi_{2*} p) W_2$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Sum out one coordinate using $\sum_y W_2(y \mid x_2) = 1$.
+\end{proof}
+
+\begin{definition}[Splitting a word]
+  \label{def:finSuccSplit}
+  \lean{LeanP1.Channel.finSuccSplit}
+  \leanok
+  The bijection $\calX^{n+1} \simeq \calX \times \calX^n$ sending a word to its first letter and
+  the remaining word.
+\end{definition}
+
+\begin{lemma}
+  \label{lem:pow_succ_eq}
+  \lean{LeanP1.Channel.pow_succ_eq}
+  \leanok
+  \uses{def:pow, def:channel_prod, def:mapOutput, def:finSuccSplit}
+  Up to the bijections of Definition~\ref{def:finSuccSplit} on inputs and outputs,
+  $W^{n+1} = W \times W^n$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Split the product over $n + 1$ coordinates into the first factor and the product over the rest.
+\end{proof}

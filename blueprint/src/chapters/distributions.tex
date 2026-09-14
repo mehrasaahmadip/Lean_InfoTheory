@@ -1,0 +1,68 @@
+\chapter{Finite distributions}
+\label{chap:distributions}
+
+\begin{definition}[Distribution]
+  \label{def:dist}
+  \lean{LeanP1.Dist}
+  \leanok
+  A \emph{distribution} on a finite set $\calX$ is a function $p \colon \calX \to \mathbb R$ such
+  that $p(x) \ge 0$ for every $x$ and $\sum_{x \in \calX} p(x) = 1$.  We write $\dist{\calX}$ for
+  the set of distributions on $\calX$.
+\end{definition}
+
+\begin{lemma}
+  \label{lem:dist_le_one}
+  \lean{LeanP1.Dist.le_one}
+  \leanok
+  \uses{def:dist}
+  For every $p \in \dist{\calX}$ and $x \in \calX$, $p(x) \le 1$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  $p(x)$ is one term of a sum of nonnegative terms equal to $1$.
+\end{proof}
+
+\begin{lemma}
+  \label{lem:dist_exists_pos}
+  \lean{LeanP1.Dist.exists_pos, LeanP1.Dist.nonempty}
+  \leanok
+  \uses{def:dist}
+  Every distribution has a point of positive mass; in particular a distribution can only exist
+  on a nonempty set.
+\end{lemma}
+\begin{proof}
+  \leanok
+  If all masses were $\le 0$ they would all be $0$, and the total mass would be $0 \ne 1$.
+\end{proof}
+
+\begin{definition}[Point mass and uniform law]
+  \label{def:pure_uniform}
+  \lean{LeanP1.Dist.pure, LeanP1.Dist.uniform, LeanP1.Dist.pure_apply_ne}
+  \leanok
+  \uses{def:dist}
+  The \emph{point mass} $\delta_a$ at $a \in \calX$ has $\delta_a(a) = 1$ and $\delta_a(b) = 0$
+  for $b \ne a$.  The \emph{uniform law} on a nonempty $\calX$ has mass $1/|\calX|$ everywhere.
+\end{definition}
+
+\begin{definition}[Pushforward]
+  \label{def:map}
+  \lean{LeanP1.Dist.map, LeanP1.Dist.map_fst_apply, LeanP1.Dist.map_snd_apply, LeanP1.Dist.map_equiv_apply}
+  \leanok
+  \uses{def:dist}
+  For $f \colon \calX \to \calY$ and $p \in \dist{\calX}$, the \emph{pushforward} $f_* p \in \dist{\calY}$ is
+  $(f_* p)(y) = \sum_{x : f(x) = y} p(x)$.  For a law $r$ on a product $\calX \times \calY$ the
+  pushforwards along the two projections are the \emph{marginals},
+  $(\pi_{1*} r)(x) = \sum_y r(x, y)$ and $(\pi_{2*} r)(y) = \sum_x r(x, y)$.  When $\sigma$ is a
+  bijection, $(\sigma_* p)(y) = p(\sigma^{-1} y)$.
+\end{definition}
+
+\begin{definition}[Product laws]
+  \label{def:prod}
+  \lean{LeanP1.Dist.prod, LeanP1.Dist.pi}
+  \leanok
+  \uses{def:dist}
+  For $p \in \dist{\calX}$ and $q \in \dist{\calY}$, the \emph{product} $p \otimes q \in \dist{\calX \times \calY}$
+  is $(p \otimes q)(x, y) = p(x)\, q(y)$.  More generally, for distributions $p_i \in \dist{\calX_i}$,
+  $i \in I$ finite, the product $\bigotimes_i p_i$ on $\prod_i \calX_i$ is
+  $(\bigotimes_i p_i)(x) = \prod_i p_i(x_i)$.
+\end{definition}

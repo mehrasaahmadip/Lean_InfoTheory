@@ -1,0 +1,137 @@
+\chapter{Mutual information}
+\label{chap:mutual_information}
+
+\begin{definition}[Conditional entropy and mutual information]
+  \label{def:mutualInfo}
+  \lean{LeanP1.Channel.condEntropy, LeanP1.Channel.mutualInfo}
+  \leanok
+  \uses{def:entropy, def:output_joint}
+  For a channel $W$ and an input law $p$, the \emph{conditional entropy} of the output given the
+  input is $\Ent(Y \mid X) = \sum_x p(x) \Ent(W(x))$, and the \emph{mutual information} is
+  \[
+    \MI(p, W) = \Ent(pW) - \Ent(Y \mid X).
+  \]
+\end{definition}
+
+\begin{lemma}
+  \label{lem:condEntropy_bounds}
+  \lean{LeanP1.Channel.condEntropy_nonneg, LeanP1.Channel.condEntropy_le_log_card}
+  \leanok
+  \uses{def:mutualInfo, lem:entropy_nonneg, thm:entropy_le_log_card}
+  $0 \le \Ent(Y \mid X) \le \log|\calY|$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Average the bounds on $\Ent(W(x))$ against $p$.
+\end{proof}
+
+\begin{theorem}[Conditioning reduces entropy]
+  \label{thm:condEntropy_le_entropy_output}
+  \lean{LeanP1.Channel.condEntropy_le_entropy_output}
+  \leanok
+  \uses{def:mutualInfo}
+  $\Ent(Y \mid X) \le \Ent(pW)$.
+\end{theorem}
+\begin{proof}
+  \leanok
+  \uses{lem:jensen, lem:negMulLog_concave}
+  For each output $y$, Jensen's inequality with weights $p(x)$ gives
+  $\sum_x p(x) \negMulLog(W(y \mid x)) \le \negMulLog\bigl(\sum_x p(x) W(y \mid x)\bigr)$; sum over $y$.
+\end{proof}
+
+\begin{theorem}
+  \label{thm:mutualInfo_nonneg}
+  \lean{LeanP1.Channel.mutualInfo_nonneg, LeanP1.Channel.mutualInfo_le_entropy_output, LeanP1.Channel.mutualInfo_le_log_card}
+  \leanok
+  \uses{def:mutualInfo}
+  $0 \le \MI(p, W) \le \Ent(pW) \le \log|\calY|$.
+\end{theorem}
+\begin{proof}
+  \leanok
+  \uses{thm:condEntropy_le_entropy_output, lem:condEntropy_bounds, thm:entropy_le_log_card}
+  The lower bound is Theorem~\ref{thm:condEntropy_le_entropy_output}; the upper bounds follow from
+  $\Ent(Y \mid X) \ge 0$ and Theorem~\ref{thm:entropy_le_log_card}.
+\end{proof}
+
+\begin{theorem}[Chain rule]
+  \label{thm:entropy_joint}
+  \lean{LeanP1.Channel.entropy_joint}
+  \leanok
+  \uses{def:mutualInfo, def:output_joint}
+  $\Ent(p \ltimes W) = \Ent(p) + \Ent(Y \mid X)$.
+\end{theorem}
+\begin{proof}
+  \leanok
+  \uses{lem:entropy_prod}
+  Expand $\negMulLog(p(x) W(y \mid x))$ with $\negMulLog(ab) = b\negMulLog(a) + a\negMulLog(b)$ and sum.
+\end{proof}
+
+\begin{lemma}
+  \label{lem:entropy_output_le_entropy_joint}
+  \lean{LeanP1.Channel.entropy_output_le_entropy_joint}
+  \leanok
+  \uses{def:output_joint, def:entropy}
+  $\Ent(pW) \le \Ent(p \ltimes W)$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  \uses{lem:negMulLog_sum_le}
+  Since $(pW)(y) = \sum_x (p \ltimes W)(x, y)$, apply Lemma~\ref{lem:negMulLog_sum_le} for each $y$.
+\end{proof}
+
+\begin{theorem}[The symmetric bound]
+  \label{thm:mutualInfo_le_entropy}
+  \lean{LeanP1.Channel.mutualInfo_eq_add_sub, LeanP1.Channel.mutualInfo_le_entropy, LeanP1.Channel.mutualInfo_le_log_card_input}
+  \leanok
+  \uses{def:mutualInfo}
+  $\MI(p, W) = \Ent(p) + \Ent(pW) - \Ent(p \ltimes W)$, hence $\MI(p, W) \le \Ent(p) \le \log|\calX|$.
+\end{theorem}
+\begin{proof}
+  \leanok
+  \uses{thm:entropy_joint, lem:entropy_output_le_entropy_joint, thm:entropy_le_log_card}
+  Combine the chain rule with Lemma~\ref{lem:entropy_output_le_entropy_joint}.
+\end{proof}
+
+\section{Relabeling and products}
+
+\begin{theorem}[Relabeling the inputs]
+  \label{thm:mutualInfo_comp}
+  \lean{LeanP1.Channel.condEntropy_comp, LeanP1.Channel.mutualInfo_comp}
+  \leanok
+  \uses{def:mutualInfo, def:map}
+  For $f \colon \calZ \to \calX$ and $p \in \dist{\calZ}$, $\MI(p, W \circ f) = \MI(f_* p, W)$.
+\end{theorem}
+\begin{proof}
+  \leanok
+  \uses{lem:output_relabel}
+  Both the output law and the conditional entropy only depend on $p$ through $f_* p$.
+\end{proof}
+
+\begin{theorem}[Relabeling the outputs]
+  \label{thm:mutualInfo_mapOutput}
+  \lean{LeanP1.Channel.condEntropy_mapOutput, LeanP1.Channel.mutualInfo_mapOutput}
+  \leanok
+  \uses{def:mutualInfo, def:mapOutput}
+  For a bijection $\sigma$ of the outputs, $\MI(p, \sigma W) = \MI(p, W)$.
+\end{theorem}
+\begin{proof}
+  \leanok
+  \uses{lem:output_relabel, lem:entropy_map_equiv}
+  Entropies are invariant under bijections.
+\end{proof}
+
+\begin{theorem}[Subadditivity for product channels]
+  \label{thm:mutualInfo_prod_le}
+  \lean{LeanP1.Channel.condEntropy_prod, LeanP1.Channel.mutualInfo_prod_le}
+  \leanok
+  \uses{def:mutualInfo, def:channel_prod}
+  For a joint input law $p$ on $\calX_1 \times \calX_2$ with marginals $p_1, p_2$,
+  $\MI(p, W_1 \times W_2) \le \MI(p_1, W_1) + \MI(p_2, W_2)$.
+\end{theorem}
+\begin{proof}
+  \leanok
+  \uses{thm:entropy_subadditive, lem:output_prod_marginals, lem:entropy_prod, thm:mutualInfo_comp}
+  The conditional entropy of the product splits exactly by Lemma~\ref{lem:entropy_prod}, and the
+  entropy of the output is at most the sum of the entropies of its marginals by
+  Theorem~\ref{thm:entropy_subadditive}, which are the output laws of the two factors.
+\end{proof}

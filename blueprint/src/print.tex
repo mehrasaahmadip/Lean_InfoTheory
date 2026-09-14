@@ -1,0 +1,21 @@
+% Printable version of the blueprint, compiled with xelatex through `leanblueprint pdf`.
+\documentclass[a4paper]{report}
+
+\usepackage{geometry}
+\usepackage{expl3}
+\usepackage{amssymb, amsthm, mathtools}
+\usepackage[warnings-off={mathtools-colon,mathtools-overbracket}]{unicode-math}
+% hyperref loaded last: clickable \cite/\ref/\eqref links in the PDF
+\usepackage[unicode, colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue]{hyperref}
+
+\input{macros/common}
+\input{macros/print}
+
+\title{Shannon's channel capacity}
+\author{Mehrasa Ahmadipour}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\input{content}
+\end{document}

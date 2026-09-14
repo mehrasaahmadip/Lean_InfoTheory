@@ -19,7 +19,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # The API documentation of Mathlib is large; make room for it.
+      - name: Free disk space
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.0
+        with:
+          tool-cache: false
+          android: true
+          dotnet: false
+          haskell: false
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0   # Referee's provenance uses git blame over the whole history
 
       # Builds the library with the Mathlib cache. This is the proof check: a failure here means
       # some file no longer compiles.
@@ -30,21 +44,41 @@ jobs:
       # plus the Theorems, Claims, Sorries and Trust pages. Pinned to the release built for this
       # project's Lean toolchain (see lean-toolchain); the two must match exactly.
       - name: Build the Referee site
+        id: referee
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: LeanMachineLearning/exposition@v4.34.0-rc2-7
         with:
           root: LeanP1
-          site-url: https://mehrasaahmadip.github.io/Lean_InfoTheory
+          site-url: https://mehrasaahmadip.github.io/Lean_InfoTheory/referee
           repo-url: https://github.com/mehrasaahmadip/Lean_InfoTheory
           title: Lean_InfoTheory
           trust: mathlib
-          site-dest: home_page
+
+      # The blueprint (LaTeX in blueprint/src, rendered by leanblueprint into a website with a
+      # dependency graph and a PDF) and the doc-gen API documentation. Both are written into
+      # home_page/ (as blueprint/, blueprint.pdf and docs/); deployment is done below so that the
+      # Referee site can be added to the same tree.
+      - name: Build the blueprint and the API documentation
+        uses: leanprover-community/docgen-action@v1
+        with:
+          blueprint: true
+          api-docs: true
+          homepage: home_page
+          build-page: false
+          deploy: false
+
+      - name: Add the Referee site to the home page
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          set -euo pipefail
+          mkdir -p home_page/referee
+          cp -r "${{ steps.referee.outputs.site }}/." home_page/referee/
 
       - name: Upload the site
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v4
         with:
-          path: home_page
+          path: home_page/
 
   deploy:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'

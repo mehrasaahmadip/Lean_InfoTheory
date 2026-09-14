@@ -1,0 +1,76 @@
+\chapter{Fano's inequality and the converse}
+\label{chap:converse}
+
+\begin{definition}[The channel seen by the messages]
+  \label{def:msgChannel}
+  \lean{LeanP1.Channel.Code.msgChannel, LeanP1.Channel.Code.avgError}
+  \leanok
+  \uses{def:code, def:pow, def:errorProb}
+  For a code $c$, the channel $V_c \colon m \mapsto W^n(\cdot \mid \mathrm{enc}(m))$ describes what a
+  message experiences.  The \emph{average error} is $\avg = \frac1M \sum_m \pe(m)$.
+\end{definition}
+
+\begin{lemma}
+  \label{lem:avgError_le_maxError}
+  \lean{LeanP1.Channel.Code.avgError_nonneg, LeanP1.Channel.Code.avgError_le_maxError}
+  \leanok
+  \uses{def:msgChannel, lem:errorProb_bounds}
+  $0 \le \avg \le \lambda$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  An average is at most the maximum.
+\end{proof}
+
+\begin{theorem}[Fano's inequality]
+  \label{thm:fano}
+  \lean{LeanP1.Channel.Code.fano}
+  \leanok
+  \uses{def:msgChannel, def:mutualInfo, def:pure_uniform}
+  For a code with $M \ge 1$ messages and uniformly distributed messages,
+  \[
+    \log M - \MI(\mathrm{uniform}, V_c) \le \log 2 + \avg \log M .
+  \]
+\end{theorem}
+\begin{proof}
+  \leanok
+  \uses{lem:gibbs_pointwise, thm:mutualInfo_le_entropy, lem:entropy_pure_uniform}
+  By Theorem~\ref{thm:mutualInfo_le_entropy} the left side is $\Ent(J) - \Ent(q)$ where $J$ is the
+  joint law of message and received word and $q$ the law of the word.  Let $t(m, y)$ put mass
+  $\frac12 + \frac1{2M}$ on the decoded message $m = \mathrm{dec}(y)$ and $\frac1{2M}$ on every other
+  $m$, so that $\sum_m t(m, y) = 1$.  Sum Lemma~\ref{lem:gibbs_pointwise} with $a = J(m, y)$ and
+  $b = q(y)\, t(m, y)$ over all $(m, y)$: the terms $-J \log q$ sum to $\Ent(q)$, the weights $b$ sum
+  to $1$, and $-\log t(m, y)$ is at most $\log 2$ on a correct decode and $\log 2 + \log M$ on an
+  error, which contributes $\log 2 + \avg \log M$.
+\end{proof}
+
+\begin{theorem}[Fano's inequality in terms of the capacity]
+  \label{thm:fano_capacity}
+  \lean{LeanP1.Channel.Code.log_card_mul_one_sub_avgError_le}
+  \leanok
+  \uses{def:msgChannel, def:capacity, def:pow}
+  For every code with $M \ge 1$ messages, $\log M \,(1 - \avg) \le \Capac(W^n) + \log 2$.
+\end{theorem}
+\begin{proof}
+  \leanok
+  \uses{thm:fano, lem:mutualInfo_comp_le_capacity}
+  $V_c$ is $W^n$ precomposed with the encoder, so Lemma~\ref{lem:mutualInfo_comp_le_capacity}
+  bounds its mutual information by $\Capac(W^n)$.
+\end{proof}
+
+\begin{theorem}[Converse of the coding theorem]
+  \label{thm:converse}
+  \lean{LeanP1.Channel.IsAchievable.le_capacity}
+  \leanok
+  \uses{def:achievable, def:capacity}
+  Every achievable rate satisfies $R \le \Capac(W)$.
+\end{theorem}
+\begin{proof}
+  \leanok
+  \uses{thm:fano_capacity, thm:capacity_pow_le, lem:avgError_le_maxError, lem:errorProb_bounds}
+  Take codes $c_n$ with rate at least $R$ and maximal error $\lambda_n \to 0$.  Every code has at
+  least one message, since the decoder takes values in the message set.  By
+  Theorems~\ref{thm:fano_capacity} and~\ref{thm:capacity_pow_le}, for $n \ge 1$,
+  $R\,(1 - \avgn{n}) \le \Capac(W) + \frac{\log 2}{n}$.  Since $0 \le \avgn{n} \le \lambda_n \to 0$, the
+  left side tends to $R$ and the right side to $\Capac(W)$.
+\end{proof}

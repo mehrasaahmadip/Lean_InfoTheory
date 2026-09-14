@@ -1,0 +1,24 @@
+% Web version of the blueprint (rendered by plasTeX through `leanblueprint web`).
+\documentclass{report}
+
+\usepackage{amssymb, amsthm, amsmath}
+\usepackage[showmore, dep_graph]{blueprint}
+% hyperref loaded last: clickable \cite/\ref/\eqref links
+\usepackage[colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue]{hyperref}
+
+\input{macros/common}
+\input{macros/web}
+
+\graphcolor{mathlib}{purple}{The statement of this result is in Mathlib}
+
+\home{https://mehrasaahmadip.github.io/Lean_InfoTheory}
+\github{https://github.com/mehrasaahmadip/Lean_InfoTheory}
+\dochome{https://mehrasaahmadip.github.io/Lean_InfoTheory/docs}
+
+\title{Shannon's channel capacity}
+\author{Mehrasa Ahmadipour}
+
+\begin{document}
+\maketitle
+\input{content}
+\end{document}

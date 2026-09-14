@@ -1,0 +1,81 @@
+\chapter{Capacity}
+\label{chap:capacity}
+
+\begin{definition}[Capacity]
+  \label{def:capacity}
+  \lean{LeanP1.Channel.capacity, LeanP1.Channel.bddAbove_range_mutualInfo}
+  \leanok
+  \uses{def:mutualInfo}
+  The \emph{capacity} of $W$ is $\Capac(W) = \sup_{p \in \dist{\calX}} \MI(p, W)$.  The supremum is over a
+  set bounded above by $\log|\calY|$.
+\end{definition}
+
+\begin{lemma}[Computing a capacity]
+  \label{lem:capacity_two_halves}
+  \lean{LeanP1.Channel.mutualInfo_le_capacity, LeanP1.Channel.le_capacity, LeanP1.Channel.capacity_le}
+  \leanok
+  \uses{def:capacity}
+  $\MI(p, W) \le \Capac(W)$ for every $p$; if $\MI(p, W) \le c$ for every $p$ then $\Capac(W) \le c$; and
+  if $c \le \MI(p, W)$ for some $p$ then $c \le \Capac(W)$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  \uses{thm:mutualInfo_nonneg}
+  Properties of the supremum of a nonempty bounded set.
+\end{proof}
+
+\begin{theorem}[Bounds on the capacity]
+  \label{thm:capacity_bounds}
+  \lean{LeanP1.Channel.capacity_nonneg, LeanP1.Channel.capacity_le_log_card, LeanP1.Channel.capacity_le_log_card_input}
+  \leanok
+  \uses{def:capacity}
+  $0 \le \Capac(W) \le \log|\calY|$ and $\Capac(W) \le \log|\calX|$.
+\end{theorem}
+\begin{proof}
+  \leanok
+  \uses{lem:capacity_two_halves, thm:mutualInfo_nonneg, thm:mutualInfo_le_entropy}
+  Apply Lemma~\ref{lem:capacity_two_halves} to the bounds on $\MI$.
+\end{proof}
+
+\begin{lemma}
+  \label{lem:mutualInfo_comp_le_capacity}
+  \lean{LeanP1.Channel.mutualInfo_comp_le_capacity}
+  \leanok
+  \uses{def:capacity}
+  For every $f \colon \calZ \to \calX$ and $p \in \dist{\calZ}$, $\MI(p, W \circ f) \le \Capac(W)$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  \uses{thm:mutualInfo_comp, lem:capacity_two_halves}
+  By Theorem~\ref{thm:mutualInfo_comp} this is $\MI(f_* p, W)$.
+\end{proof}
+
+\begin{theorem}[Capacity of a product]
+  \label{thm:capacity_prod_le}
+  \lean{LeanP1.Channel.capacity_prod_le}
+  \leanok
+  \uses{def:capacity, def:channel_prod}
+  $\Capac(W_1 \times W_2) \le \Capac(W_1) + \Capac(W_2)$.
+\end{theorem}
+\begin{proof}
+  \leanok
+  \uses{thm:mutualInfo_prod_le, lem:capacity_two_halves}
+  Bound each term of Theorem~\ref{thm:mutualInfo_prod_le} by the corresponding capacity.
+\end{proof}
+
+\begin{theorem}[Capacity of the memoryless extension]
+  \label{thm:capacity_pow_le}
+  \lean{LeanP1.Channel.capacity_pow_le}
+  \leanok
+  \uses{def:capacity, def:pow}
+  $\Capac(W^n) \le n\, \Capac(W)$ for every $n$.
+\end{theorem}
+\begin{proof}
+  \leanok
+  \uses{lem:pow_succ_eq, thm:mutualInfo_comp, thm:mutualInfo_mapOutput, thm:capacity_prod_le, thm:mutualInfo_nonneg, lem:capacity_two_halves}
+  Induction on $n$.  For $n = 0$ both alphabets are singletons and every mutual information is at
+  most $\log 1 = 0$.  For the step, Lemma~\ref{lem:pow_succ_eq} identifies $W^{n+1}$ with
+  $W \times W^n$ up to relabeling, which changes no mutual information
+  (Theorems~\ref{thm:mutualInfo_comp} and~\ref{thm:mutualInfo_mapOutput}), and
+  Theorem~\ref{thm:capacity_prod_le} gives $\Capac(W^{n+1}) \le \Capac(W) + \Capac(W^n)$.
+\end{proof}

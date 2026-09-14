@@ -1,0 +1,82 @@
+\chapter{Codes and the coding theorem}
+\label{chap:codes}
+
+\begin{definition}[Block code]
+  \label{def:code}
+  \lean{LeanP1.Channel.Code, LeanP1.Channel.rate}
+  \leanok
+  A \emph{block code} of length $n$ for $M$ messages is an encoder $\mathrm{enc} \colon \{1, \dots, M\} \to \calX^n$
+  together with a decoder $\mathrm{dec} \colon \calY^n \to \{1, \dots, M\}$.  Its \emph{rate} is
+  $\frac{\log M}{n}$ nats per channel use.
+\end{definition}
+
+\begin{definition}[Error probabilities]
+  \label{def:errorProb}
+  \lean{LeanP1.Channel.Code.errorProb, LeanP1.Channel.Code.maxError}
+  \leanok
+  \uses{def:code, def:pow}
+  The error probability of message $m$ is $\pe(m) = \sum_{y : \mathrm{dec}(y) \ne m} W^n(y \mid \mathrm{enc}(m))$,
+  and the \emph{maximal error} of the code is $\lambda = \max_m \pe(m)$.
+\end{definition}
+
+\begin{lemma}
+  \label{lem:errorProb_bounds}
+  \lean{LeanP1.Channel.Code.errorProb_nonneg, LeanP1.Channel.Code.errorProb_le_one, LeanP1.Channel.Code.maxError_nonneg, LeanP1.Channel.Code.maxError_le_one, LeanP1.Channel.Code.errorProb_le_maxError}
+  \leanok
+  \uses{def:errorProb}
+  $0 \le \pe(m) \le \lambda \le 1$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  The error probability is a partial sum of a distribution.
+\end{proof}
+
+\begin{definition}[Achievable rates and operational capacity]
+  \label{def:achievable}
+  \lean{LeanP1.Channel.IsAchievable, LeanP1.Channel.operationalCapacity}
+  \leanok
+  \uses{def:code, def:errorProb}
+  A rate $R$ is \emph{achievable} if there are codes $c_n$ of every block length $n$, with rate at
+  least $R$ for $n \ge 1$, whose maximal errors tend to $0$.  The \emph{operational capacity}
+  $\Cop(W)$ is the supremum of the achievable rates.
+\end{definition}
+
+\begin{lemma}
+  \label{lem:achievable_basic}
+  \lean{LeanP1.Channel.IsAchievable.mono, LeanP1.Channel.isAchievable_of_nonpos}
+  \leanok
+  \uses{def:achievable}
+  Any rate below an achievable rate is achievable, and every rate $R \le 0$ is achievable.
+\end{lemma}
+\begin{proof}
+  \leanok
+  For $R \le 0$ use the one-message code, which never errs.
+\end{proof}
+
+\begin{theorem}[Achievability]
+  \label{thm:achievability}
+  \lean{LeanP1.Channel.isAchievable_of_lt_capacity}
+  \leanok
+  \uses{def:achievable, def:capacity}
+  Every rate $R < \Capac(W)$ is achievable.
+\end{theorem}
+\begin{proof}
+  \uses{thm:capacity_bounds}
+  Not yet formalized.  The classical argument is random coding: draw a codebook from a
+  capacity-achieving input law, decode by joint typicality, and bound the expected error by a union
+  bound and a law of large numbers for the log-likelihood ratio.
+\end{proof}
+
+\begin{theorem}[Channel coding theorem]
+  \label{thm:coding_theorem}
+  \lean{LeanP1.Channel.operationalCapacity_eq_capacity}
+  \leanok
+  \uses{def:achievable, def:capacity}
+  $\Cop(W) = \Capac(W)$.
+\end{theorem}
+\begin{proof}
+  \leanok
+  \uses{thm:achievability, thm:converse, lem:achievable_basic}
+  The achievable rates contain every $R < \Capac(W)$ by Theorem~\ref{thm:achievability} and are all at
+  most $\Capac(W)$ by Theorem~\ref{thm:converse}, so their supremum is $\Capac(W)$.
+\end{proof}

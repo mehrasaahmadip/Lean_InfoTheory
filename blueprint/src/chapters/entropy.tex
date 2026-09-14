@@ -1,0 +1,155 @@
+\chapter{Entropy}
+\label{chap:entropy}
+
+\section{The function \texorpdfstring{$\negMulLog$}{negMulLog}}
+
+\begin{definition}
+  \label{def:negMulLog}
+  \lean{Real.negMulLog}
+  \mathlibok
+  For $x \in \mathbb R$, $\negMulLog(x) = -x \log x$, with $\log 0 = 0$ so that $\negMulLog(0) = 0$.
+\end{definition}
+
+\begin{lemma}[Concavity]
+  \label{lem:negMulLog_concave}
+  \lean{Real.concaveOn_negMulLog}
+  \mathlibok
+  \uses{def:negMulLog}
+  $\negMulLog$ is concave on $[0, \infty)$.
+\end{lemma}
+
+\begin{lemma}[Jensen]
+  \label{lem:jensen}
+  \lean{ConcaveOn.le_map_sum}
+  \mathlibok
+  If $f$ is concave on a convex set $S$, $w_i \ge 0$ with $\sum_i w_i = 1$ and $x_i \in S$, then
+  $\sum_i w_i f(x_i) \le f\bigl(\sum_i w_i x_i\bigr)$.
+\end{lemma}
+
+\begin{lemma}[Pointwise Gibbs inequality]
+  \label{lem:gibbs_pointwise}
+  \lean{Real.negMulLog_le_of_pos, Real.self_sub_one_le_mul_log}
+  \leanok
+  \uses{def:negMulLog}
+  For $a \ge 0$ and $b > 0$, $\negMulLog(a) \le -a \log b + b - a$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Apply Mathlib's $x - 1 \le x \log x$ to $x = a/b$ and multiply by $b$.  The case $a = 0$ is
+  trivial.
+\end{proof}
+
+\begin{lemma}[Gibbs inequality against a product weight]
+  \label{lem:gibbs_product}
+  \lean{Real.negMulLog_le_sub_mul_log}
+  \leanok
+  \uses{lem:gibbs_pointwise}
+  For $0 \le a \le b$ and $a \le c$ with $b, c \ge 0$,
+  $\negMulLog(a) \le -a \log b - a \log c + bc - a$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  If $b = 0$ or $c = 0$ then $a = 0$ and both sides vanish.  Otherwise apply
+  Lemma~\ref{lem:gibbs_pointwise} with the weight $bc$ and expand $\log(bc)$.
+\end{proof}
+
+\begin{lemma}[Subadditivity of \texorpdfstring{$\negMulLog$}{negMulLog}]
+  \label{lem:negMulLog_sum_le}
+  \lean{Real.negMulLog_sum_le}
+  \leanok
+  \uses{def:negMulLog}
+  For a finite family $a_i \ge 0$, $\negMulLog\bigl(\sum_i a_i\bigr) \le \sum_i \negMulLog(a_i)$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Each $a_i \le \sum_j a_j$, so $-a_i \log \sum_j a_j \le -a_i \log a_i$; sum over $i$.
+\end{proof}
+
+\section{Shannon entropy}
+
+\begin{definition}[Entropy]
+  \label{def:entropy}
+  \lean{LeanP1.Dist.entropy}
+  \leanok
+  \uses{def:dist, def:negMulLog}
+  The \emph{entropy} of $p \in \dist{\calX}$ is $\Ent(p) = \sum_{x} \negMulLog(p(x)) = -\sum_x p(x) \log p(x)$,
+  in nats.
+\end{definition}
+
+\begin{lemma}
+  \label{lem:entropy_nonneg}
+  \lean{LeanP1.Dist.entropy_nonneg}
+  \leanok
+  \uses{def:entropy, lem:dist_le_one}
+  $\Ent(p) \ge 0$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Each term $\negMulLog(p(x))$ is nonnegative because $0 \le p(x) \le 1$.
+\end{proof}
+
+\begin{theorem}[Entropy is maximised by the uniform law]
+  \label{thm:entropy_le_log_card}
+  \lean{LeanP1.Dist.entropy_le_log_card}
+  \leanok
+  \uses{def:entropy, lem:dist_exists_pos}
+  For every $p \in \dist{\calX}$, $\Ent(p) \le \log |\calX|$.
+\end{theorem}
+\begin{proof}
+  \leanok
+  \uses{lem:jensen, lem:negMulLog_concave}
+  Jensen's inequality for $\negMulLog$ with the uniform weights $1/|\calX|$ gives
+  $\frac1{|\calX|}\sum_x \negMulLog(p(x)) \le \negMulLog\bigl(\frac1{|\calX|}\bigr) = \frac{\log|\calX|}{|\calX|}$.
+\end{proof}
+
+\begin{lemma}
+  \label{lem:entropy_pure_uniform}
+  \lean{LeanP1.Dist.entropy_pure, LeanP1.Dist.entropy_uniform}
+  \leanok
+  \uses{def:entropy, def:pure_uniform}
+  $\Ent(\delta_a) = 0$ and $\Ent(\mathrm{uniform}) = \log|\calX|$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Direct computation.
+\end{proof}
+
+\begin{lemma}[Entropy of a product]
+  \label{lem:entropy_prod}
+  \lean{LeanP1.Dist.entropy_prod, Real.negMulLog_mul}
+  \leanok
+  \uses{def:entropy, def:prod}
+  $\Ent(p \otimes q) = \Ent(p) + \Ent(q)$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Use $\negMulLog(xy) = y \negMulLog(x) + x \negMulLog(y)$ and sum.
+\end{proof}
+
+\begin{lemma}[Invariance under relabeling]
+  \label{lem:entropy_map_equiv}
+  \lean{LeanP1.Dist.entropy_map_equiv}
+  \leanok
+  \uses{def:entropy, def:map}
+  If $\sigma \colon \calX \to \calY$ is a bijection then $\Ent(\sigma_* p) = \Ent(p)$.
+\end{lemma}
+\begin{proof}
+  \leanok
+  Reindex the sum along $\sigma$.
+\end{proof}
+
+\begin{theorem}[Subadditivity of entropy]
+  \label{thm:entropy_subadditive}
+  \lean{LeanP1.Dist.entropy_le_entropy_map_fst_add_map_snd}
+  \leanok
+  \uses{def:entropy, def:map}
+  For every law $r$ on $\calX \times \calY$ with marginals $r_1, r_2$,
+  $\Ent(r) \le \Ent(r_1) + \Ent(r_2)$.
+\end{theorem}
+\begin{proof}
+  \leanok
+  \uses{lem:gibbs_product}
+  Apply Lemma~\ref{lem:gibbs_product} to $a = r(x, y)$, $b = r_1(x)$, $c = r_2(y)$ and sum over
+  $(x, y)$: the terms $-r \log r_1$ sum to $\Ent(r_1)$, the terms $-r \log r_2$ to $\Ent(r_2)$,
+  and $\sum r_1(x) r_2(y) = 1 = \sum r(x, y)$.
+\end{proof}

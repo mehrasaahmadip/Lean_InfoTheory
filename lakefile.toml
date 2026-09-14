@@ -15,5 +15,10 @@ name = "mathlib"
 scope = "leanprover-community"
 rev = "v4.34.0-rc2"
 
+# Used by the blueprint's `checkdecls` step: verifies every `\lean{...}` name exists.
+[[require]]
+name = "checkdecls"
+git = "https://github.com/PatrickMassot/checkdecls.git"
+
 [[lean_lib]]
 name = "LeanP1"
